@@ -1,0 +1,280 @@
+<div class="row">
+  <div class="input-group input-group-sm mb-3 col-md-5">
+    <span class="input-group-text">Nombre:</span>
+    <input [(ngModel)]="tariff.name" type="text" class="form-control" aria-label="Sizing example input"
+           aria-describedby="inputGroup-sizing-sm">
+  </div>
+  <div class="col-md-2"></div>
+  <div class="input-group input-group-sm mb-3 col-md-5">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Descripción: </span>
+    <input [(ngModel)]="tariff.description" type="text" class="form-control" aria-label="Sizing example input"
+           aria-describedby="inputGroup-sizing-sm">
+  </div>
+</div>
+
+<div id="intervalType" class="animate__animated animate__fadeInLeft row">
+  <h2 class="text-center mt-5 mb-4">Tipo de intervalo</h2>
+  <hr>
+  <div class="list-group col-md-5">
+    <button type="button"
+            (click)="this.intervalType = 1; this.intervalSelected = 0"
+            class="list-group-item list-group-item-action"
+            [ngClass]="{'active': intervalType == 1}">
+      Horarios
+    </button>
+    <button
+      type="button"
+      (click)="this.intervalType = 2; this.intervalSelected = 0"
+      class="list-group-item list-group-item-action"
+      [ngClass]="{'active': intervalType == 2}"
+    >Eventos
+    </button>
+    <button type="button"
+            (click)="this.intervalType = 3; this.intervalSelected = 3"
+            class="list-group-item list-group-item-action"
+            [ngClass]="{'active': intervalType == 3}">
+      Default
+    </button>
+  </div>
+
+  <div class="col-md-2"></div>
+
+  <div class="mt-5 col-md-5">
+    <div>
+      <div id="horario" *ngIf="this.intervalType == 1" class="animate__animated animate__fadeInLeft">
+        <!--<div class="row">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Nombre</span>
+            <input type="text" [(ngModel)]="newScheduler." class="form-control" aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Descripción:</span>
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>-->
+        <div class="row">
+          <div class="mb-3 col-md-5">
+            <label class="form-label">Hora de inicio</label>
+            <ngb-timepicker [(ngModel)]="timeStart" [meridian]="true"></ngb-timepicker>
+            <hr>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="mb-3 col-md-5">
+            <label class="form-label">Hora de finalización</label>
+            <ngb-timepicker [(ngModel)]="timeEnd" [meridian]="true"></ngb-timepicker>
+            <hr>
+          </div>
+          <div class="form-check col-md-3" *ngFor="let item of newScheduler.days; let i  = index ">
+            <input (change)="newScheduler.days[i].active = !newScheduler.days[i].active" class="form-check-input"
+                   type="checkbox" [value]="item.active">
+            <label class="form-check-label">
+              {{item.day}}
+            </label>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-lg btn-success mt-5"
+          (click)="guardarHorario()">Guardar
+        </button>
+      </div>
+      <div id="event" *ngIf="this.intervalType == 2 " class="animate__animated animate__fadeInLeft ">
+        <input [(ngModel)]="this.event.name" class="form-control" type="text" placeholder="Nombre de evento"
+               aria-label="default input example">
+        <input [(ngModel)]="this.event.description" class="form-control mt-2" type="text"
+               placeholder="Descripcion del evento"
+               aria-label="default input example">
+
+        <form class="form-inline ">
+          <div class="form-group mt-2">
+            <div class="input-group">
+              <input class="form-control " placeholder="Fecha de inicio"
+                     name="dp" [(ngModel)]="startDate" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                  <i
+                    class="bi bi-calendar4-event"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-2">
+            <div class="input-group">
+              <input class="form-control" placeholder="Fecha de Finalizacion"
+                     name="dp" [(ngModel)]="endDate" ngbDatepicker #d2="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar mb-5" (click)="d2.toggle()" type="button">
+                  <i class="bi bi-calendar4-event"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <button
+          type="button"
+          class="btn btn-lg btn-success mt-5"
+          (click)="guardarEvento()">Guardar
+        </button>
+
+        <hr/>
+
+      </div>
+    </div>
+  </div>
+  <div id="tables" class="row animate__animated animate__fadeInLeft">
+    <div id="horarios" *ngIf="intervalType == 1" class="row  animate__animated animate__fadeInLeft mt-4">
+      <table *ngIf="schedulers.length > 0" class="table table-hover col-md-12 animate__animated animate__fadeInLeft">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Hora Inicio</th>
+          <th scope="col">Hora Fin</th>
+          <th scope="col">Dias</th>
+          <th scope="col">Tipo de tarifa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let item of schedulers; let i = index"
+          class="animate__animated animate__fadeInLeft mt-4"
+          (click)="agregarTarifa(i+1)">
+          <th scope="row">{{i + 1}}</th>
+          <td>{{item.startTime.hours | number: '2.0'}}:{{item.startTime.minutes | number: '2.0'}}</td>
+          <td>{{item.endTime.hours | number: '2.0'}}:{{item.endTime.minutes | number: '2.0'}}</td>
+          <td>
+            <div
+              class="d-inline-block"
+              *ngFor="let days of item.days">
+              <span *ngIf="days.active" class="badge badge-success">{{days.day}}</span>
+            </div>
+          </td>
+          <td>{{(item.tariffType) ? item.tariffType.name : 'Sin tarifa'}}</td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div id="eventos" *ngIf="intervalType == 2 " class="row  animate__animated animate__fadeInLeft mt-4">
+      <table *ngIf="events.length > 0" class="table table-hover col-md-12 animate__animated animate__fadeInLeft">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Fecha Inicio</th>
+          <th scope="col">Fecha Fin</th>
+          <th scope="col">Tarifa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let item of events; let i = index"
+          class="animate__animated animate__fadeInLeft mt-4"
+          (click)="agregarTarifa(i+1)">
+          <th scope="row">{{i + 1}}</th>
+          <td>{{item.name}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.startEvent | date: 'dd/MM/YYYY'}}</td>
+          <td>{{item.endEvent | date: 'dd/MM/YYYY'}}</td>
+          <td>{{(item.tariffType) ? item.tariffType.name : 'No se le ha asignado un tipo de tarifa'}}</td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="tariffType" *ngIf="intervalSelected > 0" class="mt-5 animate__animated animate__fadeInLeft row">
+  <h2 class="text-center">Tipo de tarifa</h2>
+
+  <div class="list-group col-md-5">
+    <button type="button"
+            (click)="this.tariffType = 1;"
+            class="list-group-item list-group-item-action"
+            [ngClass]="{'active': tariffType == 1}"
+    > Tarifa Fija
+    </button>
+    <button type="button"
+            (click)="this.tariffType = 2;"
+            class="list-group-item list-group-item-action"
+            [ngClass]="{'active': tariffType == 2}">
+      Hora y Fracción
+    </button>
+    <button
+      type="button"
+      (click)="this.tariffType = 3;"
+      class="list-group-item list-group-item-action"
+      [ngClass]="{'active': tariffType == 3}">
+      Rango de horas
+    </button>
+  </div>
+  <div class="col-md-6">
+    <div *ngIf="tariffType == 1" id="tariffFixed" class="animate__animated animate__fadeInLeft">
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="fixedTariff.name" type="text" class="form-control">
+        <label>Nombre de la tarifa</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="fixedTariff.price" type="number" class="form-control" placeholder="0.00" min="0" value="0"
+               step="0.01" pattern="^\d+(?:\.\d{1,2})?$" value="0.00">
+        <label>Precio de la tarifa fija</label>
+      </div>
+    </div>
+    <div *ngIf="tariffType == 2" id="tariffHourFraction" class="animate__animated animate__fadeInLeft">
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourFraction.name" type="text" class="form-control">
+        <label>Nombre de la tarifa</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourFraction.priceHour" type="number" class="form-control" placeholder="0.00" min="0"
+               step="0.01" pattern="^\d+(?:\.\d{1,2})?$" value="0.00">
+        <label>Precio por hora</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourFraction.priceFraction" type="number" class="form-control" placeholder="0.00" min="0"
+               value="0"
+               step="0.01" pattern="^\d+(?:\.\d{1,2})?$">
+        <label>Precio por fracción</label>
+      </div>
+    </div>
+    <div *ngIf="tariffType == 3" id="tariffRangeHour" class="animate__animated animate__fadeInLeft">
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourRange.name" type="text" class="form-control">
+        <label>Nombre de la tarifa</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourRange.initRange"
+               type="number"
+               class="form-control"
+               placeholder="0.00" min="0"
+               max="24"
+               step="0">
+        <label>Inicio de rango</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourRange.endRange" type="number" class="form-control" placeholder="0" min="0"
+               max="24"
+               step="0">
+        <label>Fin del rango</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input [(ngModel)]="hourRange.price" type="number" class="form-control" placeholder="0.00" min="0"
+               step="0.01" pattern="^\d+(?:\.\d{1,2})?$" value="0.00">
+        <label>Precio por hora</label>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<div *ngIf="this.tariffType==1" class="animate__animated animate__bounceInUp">
+  {{this.tariff | json}}
+</div>
+
+<div class="text-center">
+  <button (click)="saveTariff()" class="btn btn-info btn-lg">Guardar tarifas</button>
+</div>
